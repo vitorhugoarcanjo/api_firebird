@@ -1,6 +1,9 @@
 from flask import Flask, render_template
 
+from config.imports_blueprints import ini_imports_blueprints
+
 app = Flask(__name__)
+ini_imports_blueprints()
 
 @app.route('/')
 def ini_app():
