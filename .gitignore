@@ -3,13 +3,6 @@ __pycache__/
 venv/
 .env
 
-# Database
-instance/
-*.db
-*.sqlite
-*.sqlite3
-
-
 # Python
 __pycache__/
 *.pyc

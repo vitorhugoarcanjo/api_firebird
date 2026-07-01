@@ -1,19 +1,18 @@
-# routes/pasta_vendas/mensal.py
+# routes/pasta_vendas/hoje.py
 from flask import jsonify
 from utils.conexao_global.conexao_firebird import FirebirdConnection
 
 db = FirebirdConnection()
 
-def ini_mensal():
-    """Retorna vendas do mês atual (status 1 = faturado)"""
+def ini_hoje():
+    """Retorna vendas do dia atual (status 1 = faturado)"""
     try:
         with db.get_cursor() as cursor:
-            # Busca os valores de VL_TOTAL_NOTA do mês
+            # Busca os valores de VL_TOTAL_NOTA do dia
             cursor.execute("""
                 SELECT VL_TOTAL_NOTA
                 FROM movimentos
-                WHERE EXTRACT(MONTH FROM DT_EMISSAO) = EXTRACT(MONTH FROM CURRENT_DATE)
-                AND EXTRACT(YEAR FROM DT_EMISSAO) = EXTRACT(YEAR FROM CURRENT_DATE)
+                WHERE DT_EMISSAO = CURRENT_DATE
                 AND TP_STATUS = 1
             """)
             
