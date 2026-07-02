@@ -1,10 +1,8 @@
 from flask import Blueprint
 
 from .paginas import pagina_vendas
-
 from .hoje import ini_hoje
-
-from .mensal import ini_mensal
+# from .mensal import ini_mensal
 
 bp_vendas = Blueprint('vendas', __name__)
 
@@ -15,4 +13,4 @@ bp_vendas.add_url_rule('', view_func=pagina_vendas, methods=['GET'])
 bp_vendas.add_url_rule('/hoje', view_func=ini_hoje, methods=['GET'])
 
 # ROTAS -- MENSAL
-bp_vendas.add_url_rule('/mensal', view_func=ini_mensal, methods=['GET'])
+# bp_vendas.add_url_rule('/mensal', view_func=ini_mensal, methods=['GET'])
