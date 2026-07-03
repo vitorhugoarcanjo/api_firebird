@@ -1,7 +1,8 @@
 # routes/pasta_vendas/hoje.py
 from flask import jsonify, request
-from utils.conexao_global.conexao_firebird import FirebirdConnection
 from datetime import datetime
+from utils.conexao_global.conexao_firebird import FirebirdConnection
+from .services.hoje_services import buscar_vendas_finalizados
 
 db = FirebirdConnection()
 
@@ -31,28 +32,14 @@ def ini_hoje():
             # Se não houver data, usa hoje
             data_consulta = datetime.now().strftime('%Y-%m-%d')
 
-        # Executa a consulta com a data escolhida
-        with db.get_cursor() as cursor:
-            # Busca os valores de VL_TOTAL_NOTA do dia
-            cursor.execute("""
-                SELECT VL_TOTAL_NOTA
-                FROM movimentos
-                WHERE DT_EMISSAO = CURRENT_DATE
-                AND TP_STATUS = 1
-            """, (data_consulta,))
+        total_vendas, faturamento = buscar_vendas_finalizados(data_consulta)
             
-            dados = cursor.fetchall()
-            
-            # Calcula no Python
-            total_vendas = len(dados)
-            faturamento = sum(float(row[0] or 0) for row in dados)
-            
-            return jsonify({
-                'status': 'sucesso',
-                'data_consulta': data_consulta,
-                'total_vendas': total_vendas,
-                'faturamento': faturamento
-            })
+        return jsonify({
+            'status': 'sucesso',
+            'data_consulta': data_consulta,
+            'total_vendas': total_vendas,
+            'faturamento': faturamento
+        })
             
     except Exception as e:
         return jsonify({'status': 'erro', 'mensagem': str(e)}), 500

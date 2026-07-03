@@ -8,7 +8,7 @@ with db.get_cursor() as cursor:
         SELECT VL_TOTAL_NOTA
         FROM movimentos
         WHERE DT_EMISSAO = CURRENT_DATE
-        AND TP_STATUS = 1
+        AND TIPO = 0
     """)
     
     dados = cursor.fetchall()

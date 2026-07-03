@@ -25,7 +25,7 @@ class FirebirdConnection:
     def __init__(self):
         """ CONFIGURA OS PARAMETROS DE CONEXÃO """
         self.host = '127.0.0.1' # IP SERVIDOR
-        self.database = 'D:/Sol.NET/Banco de Dados/SOLNET.FDB' # CAMINHO DO .FDB
+        self.database = 'D:/Sol.NET/Banco de Dados/JI-PARANA/SOLNET.FDB' # CAMINHO DO .FDB
         self.user = 'SYSDBA'
         self.password = 'masterkey'
         self.port = 3050 # Porta padrão Firebird
