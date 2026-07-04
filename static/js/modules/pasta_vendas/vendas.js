@@ -28,10 +28,20 @@ async function carregarDados() {
         const dadosHoje = await respHoje.json();
 
         if (dadosHoje.status === 'sucesso') {
-            // 🔥 ATUALIZA OS CARDS
-            document.getElementById('hoje_vendas').textContent = dadosHoje.total_vendas;
-            document.getElementById('hoje_faturamento').textContent = 
-                formatarMoeda(dadosHoje.faturamento);
+            // BLOCO - FINALIZADO
+            document.getElementById('hoje_finalizados').textContent = dadosHoje.total_finalizados;
+            document.getElementById('hoje_faturamento_finalizados').textContent = 
+                formatarMoeda(dadosHoje.faturamento_finalizados);
+
+            // BLOCO - EXCLUIDO
+            document.getElementById('hoje_excluidos').textContent = dadosHoje.total_excluidos;
+            document.getElementById('hoje_faturamento_excluidos').textContent = 
+                formatarMoeda(dadosHoje.faturamento_excluidos)
+
+            // BLOCO - ABERTOS
+            document.getElementById('hoje_abertos').textContent = dadosHoje.total_abertos;
+            document.getElementById('hoje_faturamento_abertos').textContent = 
+                formatarMoeda(dadosHoje.faturamento_abertos)
 
             // 🔥 CORREÇÃO: ATUALIZA TODOS OS TÍTULOS DOS CARDS
             if (dadosHoje.data_consulta) {

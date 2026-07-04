@@ -21,24 +21,50 @@
             <button onclick="carregarDados()">Consultar</button>
         </div>
 
-        <!-- CARDS -->
-        <div class="cards" id="cards">
-            <!-- Card: Vendas -->
-            <div class="card">
-                <h3>📦 Vendas</h3>
-                <div class="valor" id="hoje_vendas">Carregando...</div>
-                <div class="subtexto">Total de notas</div>
-            </div>
-
-            <!-- Card: Faturamento -->
+        <!-- CARDS FINALIZADOS -->
+        <div class="cards" id="cards_finalizados">
             <div class="card">
                 <h3>💰 FINALIZADOS</h3>
-                <div class="valor positivo" id="hoje_faturamento">Carregando...</div>
-                <div class="subtexto">Valor total</div>
+                <div class="valor" id="hoje_finalizados">Carregando...</div>
+                <div class="subtexto">Total de registros</div>
             </div>
-            
+            <div class="card">
+                <h3>💰 TOTAL</h3>
+                <div class="valor positivo" id="hoje_faturamento_finalizados">Carregando...</div>
+                <div class="subtexto">Valor total registrado</div>
+            </div>
         </div>
 
+        <!-- CARD ABERTOS -->
+        <div class="cards" id="cards_abertos">
+            <div class="card">
+                <h3>📦 ABERTOS</h3>
+                <div class="valor" id="hoje_abertos">Carregando...</div>
+                <div class="subtexto">Total de registros</div>
+            </div>
+            <div class="card">
+                <h3>📦 TOTAL</h3>
+                <div class="valor aberto" id="hoje_faturamento_abertos">Carregando...</div>
+                <div class="subtexto">Valor total</div>
+            </div>
+        </div>
+
+        <!-- CARDS EXCLUIDOS -->
+        <div class="cards" id="cards_excluidos">
+            <div class="card">
+                <h3>❌ EXCLUÍDOS</h3>
+                <div class="valor" id="hoje_excluidos">Carregando...</div>
+                <div class="subtexto">Total de registros</div>
+            </div>
+            <div class="card">
+                <h3>❌ TOTAL</h3>
+                <div class="valor negativo" id="hoje_faturamento_excluidos">Carregando...</div>
+                <div class="subtexto">Valor total</div>
+            </div>
+        </div>
+
+
+        
         <!-- ATUALIZAÇÃO -->
         <div class="atualizacao" id="atualizacao">
             🔄 Atualizado em: Carregando...
