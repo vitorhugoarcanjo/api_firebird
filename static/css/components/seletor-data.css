@@ -1,0 +1,80 @@
+.seletor-data {
+    background: white;
+    padding: 18px 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    border: 1px solid #e9ecef;
+}
+
+.seletor-data label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.seletor-data input[type="date"] {
+    padding: 10px 16px;
+    border: 2px solid #dce1e8;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f8f9fa;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.seletor-data input[type="date"]:hover {
+    border-color: #b0c4de;
+    background: #fff;
+}
+
+.seletor-data input[type="date"]:focus {
+    border-color: #3498db;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.seletor-data input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.seletor-data input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.seletor-data button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.seletor-data button:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.seletor-data button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}

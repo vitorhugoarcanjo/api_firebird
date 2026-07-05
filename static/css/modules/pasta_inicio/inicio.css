@@ -1,0 +1,169 @@
+/* ============================================
+   PÁGINA INICIAL - DASHBOARD ERP
+   ============================================ */
+
+/* ============================================
+   BOAS-VINDAS
+   ============================================ */
+.welcome {
+    text-align: center;
+    padding: 40px 20px 20px 20px;
+}
+
+.welcome h2 {
+    font-size: 32px;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.welcome h2 span {
+    color: #3498db;
+}
+
+.welcome .subtitulo {
+    font-size: 18px;
+    color: #7f8c8d;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   CARDS DOS MÓDULOS
+   ============================================ */
+.modulos-rapidos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.modulo-card {
+    background: white;
+    padding: 28px 20px 22px 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.modulo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.10);
+    border-color: #3498db;
+}
+
+.modulo-card .modulo-icone {
+    font-size: 44px;
+    line-height: 1;
+}
+
+.modulo-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 4px 0 0 0;
+}
+
+.modulo-card p {
+    font-size: 14px;
+    color: #95a5a6;
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.modulo-card .modulo-status {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3498db;
+    margin-top: 8px;
+    padding: 6px 16px;
+    background: #eaf2f8;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.modulo-card:hover .modulo-status {
+    background: #3498db;
+    color: white;
+}
+
+/* ============================================
+   RODAPÉ DA PÁGINA INICIAL
+   ============================================ */
+.footer-inicio {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.footer-inicio p {
+    font-size: 14px;
+    color: #95a5a6;
+    margin: 0;
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+@media (max-width: 768px) {
+    .modulos-rapidos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .welcome {
+        padding: 20px 15px;
+    }
+
+    .welcome h2 {
+        font-size: 24px;
+    }
+
+    .welcome .subtitulo {
+        font-size: 16px;
+    }
+
+    .modulos-rapidos {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .modulo-card {
+        padding: 20px 14px;
+    }
+
+    .modulo-card .modulo-icone {
+        font-size: 32px;
+    }
+
+    .modulo-card h3 {
+        font-size: 15px;
+    }
+
+    .modulo-card p {
+        font-size: 12px;
+    }
+
+    .modulo-card .modulo-status {
+        font-size: 11px;
+        padding: 4px 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .modulos-rapidos {
+        grid-template-columns: 1fr;
+    }
+}

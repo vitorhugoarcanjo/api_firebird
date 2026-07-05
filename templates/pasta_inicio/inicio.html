@@ -1,13 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TELA PRINCIPAL</title>
-</head>
-<body>
-    <h1>TELA CONECTADA COM FLASK</h1>
+{% extends "base.html" %}
 
-    <a href="{{'vendas'}}">RESUMO VENDAS</a>
-</body>
-</html>
+{% block titulo %}Início - Dashboard ERP{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modules/pasta_inicio/inicio.css') }}">
+{% endblock %}
+
+{% block titulo_pagina %}🏠 Início{% endblock %}
+
+{% block conteudo %}
+<div class="welcome">
+    <h2>Bem-vindo ao <span>Dashboard ERP</span></h2>
+    <p class="subtitulo">
+        🚀 Central de análises e relatórios do seu sistema.
+    </p>
+    
+    <div class="info-modulos">
+        <div class="info-item">
+            <span>📊</span>
+            <div>
+                <h4>Vendas</h4>
+                <p>Resumo diário, semanal e mensal das vendas</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-inicio">
+        <p>💡 Utilize o menu lateral para navegar entre os módulos.</p>
+    </div>
+</div>
+{% endblock %}

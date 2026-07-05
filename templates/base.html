@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Dashboard ERP{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base/base.css') }}">
+    
+    {% block css_extra %}{% endblock %}
+</head>
+<body>
+    <!-- MENU LATERAL -->
+    <nav class="menu-lateral" id="menuLateral">
+        <div class="menu-header">
+            <span class="logo-icone">🚀</span>
+            <h2>ERP</h2>
+            <button class="btn-fechar" onclick="fecharMenu()">✕</button>
+        </div>
+
+        <ul class="menu-links">
+            <li>
+                <a href="/" class="{% if request.path == '/' %}ativo{% endif %}">
+                    <span class="icone">🏠</span>
+                    <span class="texto">Início</span>
+                </a>
+            </li>
+            <li>
+                <a href="/vendas" class="{% if request.path.startswith('/vendas') %}ativo{% endif %}">
+                    <span class="icone">📊</span>
+                    <span class="texto">Vendas</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="menu-footer">
+            <span>v1.0</span>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="conteudo-principal" id="conteudoPrincipal">
+        <header class="topo-mobile">
+            <button class="btn-hamburguer" onclick="abrirMenu()">☰</button>
+            <h1>{% block titulo_pagina %}Dashboard{% endblock %}</h1>
+        </header>
+
+        <main class="conteudo">
+            {% block conteudo %}{% endblock %}
+        </main>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+    <script src="{{ url_for('static', filename='js/base/mobile_menu.js') }}"></script>
+    {% block js_extra %}{% endblock %}
+</body>
+</html>

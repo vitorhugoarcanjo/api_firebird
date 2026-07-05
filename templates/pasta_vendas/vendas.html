@@ -1,79 +1,87 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumo de Vendas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modules/pasta_vendas/vendas.css') }}">
-</head>
-<body>
-    <div class="container">
-        <!-- VOLTAR -->
-        <a href="/" class="voltar">⬅ Voltar</a>
-        
-        <!-- TÍTULO -->
-        <h1>📊 Resumo de Vendas</h1>
+{% extends "base.html" %}
 
-        <!-- SELETOR DE DATA -->
-        <div class="seletor-data">
-            <label for="selecionar_data">📅 DATA:</label>
-            <input type="date" id="selecionar_data">
-            <button onclick="carregarDados()">Consultar</button>
-        </div>
+{% block titulo %}Resumo de Vendas{% endblock %}
 
-        <!-- CARDS FINALIZADOS -->
-        <div class="cards" id="cards_finalizados">
-            <div class="card">
-                <h3>💰 FINALIZADOS</h3>
-                <div class="valor" id="hoje_finalizados">Carregando...</div>
-                <div class="subtexto">Total de registros</div>
-            </div>
-            <div class="card">
-                <h3>💰 TOTAL</h3>
-                <div class="valor positivo" id="hoje_faturamento_finalizados">Carregando...</div>
-                <div class="subtexto">Valor total registrado</div>
-            </div>
-        </div>
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modules/pasta_vendas/vendas.css') }}">
+{% endblock %}
 
-        <!-- CARD ABERTOS -->
-        <div class="cards" id="cards_abertos">
-            <div class="card">
-                <h3>📦 ABERTOS</h3>
-                <div class="valor" id="hoje_abertos">Carregando...</div>
-                <div class="subtexto">Total de registros</div>
-            </div>
-            <div class="card">
-                <h3>📦 TOTAL</h3>
-                <div class="valor aberto" id="hoje_faturamento_abertos">Carregando...</div>
-                <div class="subtexto">Valor total</div>
-            </div>
-        </div>
+{% block titulo_pagina %}📊 Resumo de Vendas{% endblock %}
 
-        <!-- CARDS EXCLUIDOS -->
-        <div class="cards" id="cards_excluidos">
-            <div class="card">
-                <h3>❌ EXCLUÍDOS</h3>
-                <div class="valor" id="hoje_excluidos">Carregando...</div>
-                <div class="subtexto">Total de registros</div>
-            </div>
-            <div class="card">
-                <h3>❌ TOTAL</h3>
-                <div class="valor negativo" id="hoje_faturamento_excluidos">Carregando...</div>
-                <div class="subtexto">Valor total</div>
-            </div>
-        </div>
-
-
-        
-        <!-- ATUALIZAÇÃO -->
-        <div class="atualizacao" id="atualizacao">
-            🔄 Atualizado em: Carregando...
-        </div>
-
-        <!-- ERRO -->
-        <div id="erro" class="erro" style="display:none;"></div>
+{% block conteudo %}
+<!-- SELETOR DE DATA -->
+<div class="seletor-data">
+    <div class="campo-data">
+        <label for="data_inicio">📅 DE:</label>
+        <input type="date" id="data_inicio">
     </div>
 
-    <script src="{{ url_for('static', filename='js/modules/pasta_vendas/vendas.js') }}"></script>
-</body>
-</html>
+    <div class="campo-data">
+        <label for="data_fim">📅 ATÉ:</label>
+        <input type="date" id="data_fim">
+    </div>
+
+    <button onclick="carregarDados()">Consultar</button>
+</div>
+
+<!-- ABAS -->
+<div class="abas-container">
+    <button class="aba ativa" data-periodo="hoje" onclick="mudarPeriodo('hoje')">📅 Hoje</button>
+    <button class="aba" data-periodo="semanal" onclick="mudarPeriodo('semanal')">📆 Semanal</button>
+    <button class="aba" data-periodo="mensal" onclick="mudarPeriodo('mensal')">📊 Mensal</button>
+</div>
+
+<!-- CARDS FINALIZADOS -->
+<div class="cards" id="cards_finalizados">
+    <div class="card">
+        <h3>💰 FINALIZADOS</h3>
+        <div class="valor" id="hoje_finalizados">Carregando...</div>
+        <div class="subtexto">Total de registros</div>
+    </div>
+    <div class="card">
+        <h3>💰 TOTAL</h3>
+        <div class="valor positivo" id="hoje_faturamento_finalizados">Carregando...</div>
+        <div class="subtexto">Valor total registrado</div>
+    </div>
+</div>
+
+<!-- CARD ABERTOS -->
+<div class="cards" id="cards_abertos">
+    <div class="card">
+        <h3>📦 ABERTOS</h3>
+        <div class="valor" id="hoje_abertos">Carregando...</div>
+        <div class="subtexto">Total de registros</div>
+    </div>
+    <div class="card">
+        <h3>📦 TOTAL</h3>
+        <div class="valor aberto" id="hoje_faturamento_abertos">Carregando...</div>
+        <div class="subtexto">Valor total</div>
+    </div>
+</div>
+
+<!-- CARDS EXCLUIDOS -->
+<div class="cards" id="cards_excluidos">
+    <div class="card">
+        <h3>❌ EXCLUÍDOS</h3>
+        <div class="valor" id="hoje_excluidos">Carregando...</div>
+        <div class="subtexto">Total de registros</div>
+    </div>
+    <div class="card">
+        <h3>❌ TOTAL</h3>
+        <div class="valor negativo" id="hoje_faturamento_excluidos">Carregando...</div>
+        <div class="subtexto">Valor total</div>
+    </div>
+</div>
+
+<!-- ATUALIZAÇÃO -->
+<div class="atualizacao" id="atualizacao">
+    🔄 Atualizado em: Carregando...
+</div>
+
+<!-- ERRO -->
+<div id="erro" class="erro" style="display:none;"></div>
+{% endblock %}
+
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/modules/pasta_vendas/vendas.js') }}"></script>
+{% endblock %}

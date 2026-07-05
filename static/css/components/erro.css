@@ -1,0 +1,11 @@
+.erro {
+    background: #fde8e8;
+    color: #e74c3c;
+    padding: 14px 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 15px;
+    display: none;
+    border: 1px solid #f5c6cb;
+    font-weight: 500;
+}

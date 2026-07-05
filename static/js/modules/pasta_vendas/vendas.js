@@ -1,8 +1,6 @@
 // static/js/modules/pasta_vendas/vendas.js
 
-// ============================================
-// DASHBOARD DE VENDAS - MÓDULO PRINCIPAL
-// ============================================
+let periodoAtual = 'hoje';
 
 function formatarMoeda(valor) {
     let valorStr = valor.toFixed(2);
@@ -11,52 +9,88 @@ function formatarMoeda(valor) {
     return 'R$ ' + inteiroFormatado + ',' + partes[1];
 }
 
-async function carregarDados() {
-    const inputData = document.getElementById('selecionar_data');
-    const dataSelecionada = inputData ? inputData.value : '';
+function mudarPeriodo(periodo) {
+    periodoAtual = periodo;
 
-    let url = '/vendas/hoje';
-    if (dataSelecionada) {
-        url += `?data=${dataSelecionada}`;
+    document.querySelectorAll('.aba').forEach(btn => {
+        btn.classList.remove('ativa');
+    });
+    document.querySelector(`.aba[data-periodo="${periodo}"]`).classList.add('ativa');
+
+    // 🔥 AJUSTA AS DATAS AUTOMATICAMENTE
+    ajustarDatasPorPeriodo(periodo);
+    carregarDados();
+}
+
+function ajustarDatasPorPeriodo(periodo) {
+    const inputInicio = document.getElementById('data_inicio');
+    const inputFim = document.getElementById('data_fim');
+    const hoje = new Date();
+    let dataInicio = new Date();
+    let dataFim = new Date();
+
+    if (periodo === 'hoje') {
+        dataInicio = hoje;
+        dataFim = hoje;
+    } else if (periodo === 'semanal') {
+        dataFim = hoje;
+        dataInicio = new Date(hoje);
+        dataInicio.setDate(hoje.getDate() - 6);
+    } else if (periodo === 'mensal') {
+        dataFim = hoje;
+        dataInicio = new Date(hoje);
+        dataInicio.setDate(hoje.getDate() - 29);
+    }
+
+    inputInicio.value = dataInicio.toISOString().split('T')[0];
+    inputFim.value = dataFim.toISOString().split('T')[0];
+}
+
+async function carregarDados() {
+    const inputInicio = document.getElementById('data_inicio');
+    const inputFim = document.getElementById('data_fim');
+    
+    const dataInicio = inputInicio ? inputInicio.value : '';
+    const dataFim = inputFim ? inputFim.value : '';
+
+    // 🔥 MONTA A URL COM AS DUAS DATAS
+    let url = `/vendas/${periodoAtual}`;
+    if (dataInicio && dataFim) {
+        url += `?inicio=${dataInicio}&fim=${dataFim}`;
+    } else if (dataInicio) {
+        url += `?data=${dataInicio}`;
     }
 
     document.getElementById('atualizacao').innerHTML = 
         `🔄 Atualizado em: ${new Date().toLocaleString('pt-BR')}`;
 
     try {
-        const respHoje = await fetch(url);
-        const dadosHoje = await respHoje.json();
+        const resp = await fetch(url);
+        const dados = await resp.json();
 
-        if (dadosHoje.status === 'sucesso') {
-            // BLOCO - FINALIZADO
-            document.getElementById('hoje_finalizados').textContent = dadosHoje.total_finalizados;
+        if (dados.status === 'sucesso') {
+            // Atualiza os cards
+            document.getElementById('hoje_finalizados').textContent = dados.total_finalizados;
             document.getElementById('hoje_faturamento_finalizados').textContent = 
-                formatarMoeda(dadosHoje.faturamento_finalizados);
+                formatarMoeda(dados.faturamento_finalizados);
 
-            // BLOCO - EXCLUIDO
-            document.getElementById('hoje_excluidos').textContent = dadosHoje.total_excluidos;
+            document.getElementById('hoje_excluidos').textContent = dados.total_excluidos;
             document.getElementById('hoje_faturamento_excluidos').textContent = 
-                formatarMoeda(dadosHoje.faturamento_excluidos)
+                formatarMoeda(dados.faturamento_excluidos);
 
-            // BLOCO - ABERTOS
-            document.getElementById('hoje_abertos').textContent = dadosHoje.total_abertos;
+            document.getElementById('hoje_abertos').textContent = dados.total_abertos;
             document.getElementById('hoje_faturamento_abertos').textContent = 
-                formatarMoeda(dadosHoje.faturamento_abertos)
+                formatarMoeda(dados.faturamento_abertos);
 
-            // 🔥 CORREÇÃO: ATUALIZA TODOS OS TÍTULOS DOS CARDS
-            if (dadosHoje.data_consulta) {
-                const dataFormatada = new Date(dadosHoje.data_consulta + 'T00:00:00')
-                    .toLocaleDateString('pt-BR');
-                
-                // Atualiza TODOS os títulos dos cards
+            // Atualiza os títulos dos cards
+            if (dados.data_consulta) {
                 const labels = document.querySelectorAll('.card h3');
                 labels.forEach(label => {
-                    // Só atualiza se não for um dos títulos fixos (Vendas, Faturamento, etc)
                     if (!label.innerHTML.includes('📦') && 
                         !label.innerHTML.includes('💰') && 
                         !label.innerHTML.includes('✅') && 
                         !label.innerHTML.includes('❌')) {
-                        label.innerHTML = `📅 ${dataFormatada}`;
+                        label.innerHTML = `📅 ${dados.data_consulta}`;
                     }
                 });
             }
@@ -70,13 +104,24 @@ async function carregarDados() {
     }
 }
 
+// ============================================
+// INICIALIZAÇÃO
+// ============================================
+
 document.addEventListener('DOMContentLoaded', function() {
-    const inputData = document.getElementById('selecionar_data');
-    if (inputData) {
+    const inputInicio = document.getElementById('data_inicio');
+    const inputFim = document.getElementById('data_fim');
+    
+    if (inputInicio && inputFim) {
         const hoje = new Date().toISOString().split('T')[0];
-        inputData.value = hoje;
+        inputInicio.value = hoje;
+        inputFim.value = hoje;
+        
         carregarDados();
-        inputData.addEventListener('change', carregarDados);
+        
+        // 🔥 ATUALIZA QUANDO O USUÁRIO MUDAR AS DATAS
+        inputInicio.addEventListener('change', carregarDados);
+        inputFim.addEventListener('change', carregarDados);
     } else {
         carregarDados();
     }
