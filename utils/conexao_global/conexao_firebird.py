@@ -1,74 +1,79 @@
+# core/conexao_firebird.py
 import fdb
 import logging
 from contextlib import contextmanager
-from typing import Optional, Generator
+from typing import Generator
+from routes.pasta_conexoes_bd.gerenciador_conexoes import gerenciador
 
-# configuração para logging para ver erros
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class FirebirdConnection:
     """
-    CLASE SINGLETON PARA GERENCIAR CONEXÕES COM FIREBIRD.
-    ABE E FECHA A CONEXÃO AUTOMATICAMENTE USANDO O CONTEXT MANAGER
+    CLASSE SINGLETON PARA GERENCIAR CONEXÕES COM FIREBIRD.
+    USA A CONEXÃO ATIVA CADASTRADA NO GERENCIADOR.
     """
 
     _instance = None
-    _connection = None
 
     def __new__(cls):
-        """ GARANTE QUE SÓ EXISTA UMA INSTANCIA DA CLASSE (SINGLETON)"""
         if cls._instance is None:
             cls._instance = super(FirebirdConnection, cls).__new__(cls)
         return cls._instance
     
     def __init__(self):
-        """ CONFIGURA OS PARAMETROS DE CONEXÃO """
-        self.host = '127.0.0.1' # IP SERVIDOR
-        self.database = 'D:/Sol.NET/Banco de Dados/JI-PARANA/SOLNET.FDB' # CAMINHO DO .FDB
-        self.user = 'SYSDBA'
-        self.password = 'masterkey'
-        self.port = 3050 # Porta padrão Firebird
-
-        # Configuração para leitura SEM TRAVAR o banco
+        self._carregar_conexao()
+    
+    def _carregar_conexao(self):
+        dados = gerenciador.buscar_ativa()
+        
+        if dados:
+            self.host = dados['host']
+            self.database = dados['database']
+            self.user = dados['usuario']
+            self.password = dados['senha']
+            self.port = dados['porta']
+            self.nome_conexao = dados['nome']
+            logger.info(f"🔗 Conexão ativa: {self.nome_conexao} ({self.host})")
+        else:
+            self.host = '127.0.0.1'
+            self.database = 'D:/Sol.NET/Banco de Dados/JI-PARANA/SOLNET.FDB'
+            self.user = 'SYSDBA'
+            self.password = 'masterkey'
+            self.port = 3050
+            self.nome_conexao = 'Padrão (fallback)'
+            logger.warning("⚠️ Nenhuma conexão ativa. Usando fallback.")
+        
         self.isolation_level = fdb.ISOLATION_LEVEL_READ_COMMITED
+
+    def recarregar_conexao(self):
+        self._carregar_conexao()
+        logger.info("🔄 Conexão recarregada com sucesso!")
 
     @contextmanager
     def get_cursor(self) -> Generator[fdb.Cursor, None, None]:
-        """
-        GERENCIADOR DE CONTEXTO - A mágica acontece aqui!
-        Use com 'with' para abrir e fechar a conexão automaticamente.
-        """
         conexao = None
         cursor = None
 
         try:
-            # Abre a conexão apenas quando for usar
             conexao = fdb.connect(
-                host = self.host,
-                database = self.database,
-                user = self.user,
-                password = self.password,
-                port = self.port,
-                isolation_level = self.isolation_level,
-                charset = 'UTF8'
+                host=self.host,
+                database=self.database,
+                user=self.user,
+                password=self.password,
+                port=self.port,
+                isolation_level=self.isolation_level,
+                charset='UTF8'
             )
-            # Cria o cursor
             cursor = conexao.cursor()
-            
-            logger.info(f"Conexão aberta com sucesso em {self.host}")
-            
-            # Retorna o cursor pro bloco 'with' usar
+            logger.info(f"Conexão aberta em {self.host}")
             yield cursor
-
-            # Se chegou aqui sem erros, confirma a transação (SELECT não precisa, mas mantém padrão)
             conexao.commit()
 
         except fdb.Error as e:
-            logger.error(f"Erro no firebird: {e}")
+            logger.error(f"Erro no Firebird: {e}")
             if conexao:
-                conexao.rollback() # Desfaz qualquer transação pendente
-            raise # Repassa o erro pra quem chamou
+                conexao.rollback()
+            raise
 
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
@@ -77,36 +82,27 @@ class FirebirdConnection:
             raise
 
         finally:
-            # FECHA TUDO - Isso é executado SEMPRE, mesmo com erro!
             if cursor:
                 cursor.close()
-                logger.debug("Cursor Fechado")
-
             if conexao:
                 conexao.close()
-                logger.info("Conexão fechada com sucesso")
+                logger.info("Conexão fechada")
 
-        
     @contextmanager
     def get_connection(self) -> Generator[fdb.Connection, None, None]:
-        """
-        Caso você precise da conexão inteira (não só do cursor)
-        """
         conexao = None
         try:
             conexao = fdb.connect(
-                host = self.host,
-                database = self.database,
-                user = self.user,
-                password = self.password,
-                port = self.port,
-                isolation_level = self.isolation_level,
-                charset = 'UTF8'
+                host=self.host,
+                database=self.database,
+                user=self.user,
+                password=self.password,
+                port=self.port,
+                isolation_level=self.isolation_level,
+                charset='UTF8'
             )
-
-            logger.info(f"Conexão aberta com sucesso em {self.host}")
+            logger.info(f"Conexão aberta em {self.host}")
             yield conexao
-
             conexao.commit()
         
         except Exception as e:
@@ -118,4 +114,37 @@ class FirebirdConnection:
         finally:
             if conexao:
                 conexao.close()
-                logger.info("Conexão fechada com sucesso")
+                logger.info("Conexão fechada")
+
+
+# ============================================
+# FUNÇÕES UTILITÁRIAS
+# ============================================
+
+def verificar_conexao():
+    """
+    Verifica se existe conexão ativa ou cadastrada.
+    Retorna: (tem_conexao, mensagem, dados_conexao)
+    """
+    dados = gerenciador.buscar_ativa()
+    
+    if dados:
+        return True, f"Conexão ativa: {dados['nome']}", dados
+    
+    todas = gerenciador.listar_todas()
+    
+    if todas:
+        primeira = todas[0]
+        gerenciador.definir_ativa(primeira['id'])
+        dados = gerenciador.buscar_ativa()
+        return True, f"Conexão '{primeira['nome']}' ativada automaticamente", dados
+    
+    return False, "Nenhuma conexão cadastrada. Cadastre uma para começar.", None
+
+
+def verificar_antes_de_consultar():
+    """Versão simplificada para usar antes de qualquer consulta"""
+    tem, msg, _ = verificar_conexao()
+    if tem:
+        return True, None
+    return False, msg

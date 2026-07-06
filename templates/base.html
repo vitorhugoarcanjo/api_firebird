@@ -32,6 +32,21 @@
                 </a>
             </li>
 
+            <!-- ==========================================
+                 SEPARADOR (linha visual)
+            ========================================== -->
+            <li class="menu-divisor"></li>
+
+            <!-- ==========================================
+                 CONFIGURAÇÕES
+            ========================================== -->
+            <li>
+                <a href="/conexoes/cadastrar" class="{% if request.path.startswith('/conexoes') %}ativo{% endif %}">
+                    <span class="icone">⚙️</span>
+                    <span class="texto">Conexões</span>
+                </a>
+            </li>
+
         </ul>
 
         <div class="menu-footer">

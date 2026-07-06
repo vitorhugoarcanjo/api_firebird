@@ -129,6 +129,20 @@
 }
 
 /* ============================================
+   SEPARADOR DO MENU
+   ============================================ */
+.menu-divisor {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 10px 16px;
+    list-style: none;
+}
+
+.menu-lateral:hover .menu-divisor {
+    margin: 10px 20px;
+}
+
+/* ============================================
    RODAPÉ
    ============================================ */
 .menu-footer {
