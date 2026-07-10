@@ -33,15 +33,17 @@ class FirebirdConnection:
             self.password = dados['senha']
             self.port = dados['porta']
             self.nome_conexao = dados['nome']
+            self.tem_conexao = True
             logger.info(f"🔗 Conexão ativa: {self.nome_conexao} ({self.host})")
         else:
-            self.host = '127.0.0.1'
-            self.database = 'D:/Sol.NET/Banco de Dados/JI-PARANA/SOLNET.FDB'
-            self.user = 'SYSDBA'
-            self.password = 'masterkey'
-            self.port = 3050
-            self.nome_conexao = 'Padrão (fallback)'
-            logger.warning("⚠️ Nenhuma conexão ativa. Usando fallback.")
+            self.tem_conexao = False
+            self.host = None
+            self.database = None
+            self.user = None
+            self.password = None
+            self.port = None
+            self.nome_conexao = None
+            logger.warning("⚠️ Nenhuma conexão ativa cadastrada!")  # 🔥 CORRIGIDO
         
         self.isolation_level = fdb.ISOLATION_LEVEL_READ_COMMITED
 
@@ -49,8 +51,20 @@ class FirebirdConnection:
         self._carregar_conexao()
         logger.info("🔄 Conexão recarregada com sucesso!")
 
+    def _verificar_antes_de_conectar(self):
+        """Verifica se tem conexão ativa antes de tentar conectar"""
+        if not self.tem_conexao:
+            raise Exception(
+                "❌ Nenhuma conexão com o banco de dados configurada!\n"
+                "   Acesse /conexoes/cadastrar para cadastrar uma conexão."
+            )
+
     @contextmanager
     def get_cursor(self) -> Generator[fdb.Cursor, None, None]:
+        """Abre e fecha a conexão automaticamente"""
+        # 🔥 VERIFICA ANTES DE TENTAR CONECTAR
+        self._verificar_antes_de_conectar()
+        
         conexao = None
         cursor = None
 
@@ -90,6 +104,10 @@ class FirebirdConnection:
 
     @contextmanager
     def get_connection(self) -> Generator[fdb.Connection, None, None]:
+        """Retorna a conexão inteira (não só o cursor)"""
+        # 🔥 VERIFICA ANTES DE TENTAR CONECTAR
+        self._verificar_antes_de_conectar()
+        
         conexao = None
         try:
             conexao = fdb.connect(
@@ -148,3 +166,5 @@ def verificar_antes_de_consultar():
     if tem:
         return True, None
     return False, msg
+
+db = FirebirdConnection()

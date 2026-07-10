@@ -1,0 +1,114 @@
+/* ============================================
+   AVISO GLOBAL - BASE
+   ============================================ */
+.aviso-global {
+    padding: 16px 24px;
+    margin: 10px 20px 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    border: 2px solid;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.aviso-global.aviso-erro {
+    background: #fef3f2;
+    border-color: #f5c6cb;
+}
+
+.aviso-global.aviso-sucesso {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.aviso-global.aviso-alerta {
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.aviso-global .aviso-conteudo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.aviso-global .aviso-icone {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.aviso-global .aviso-texto {
+    flex: 1;
+}
+
+.aviso-global .aviso-texto h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+    color: #2c3e50;
+}
+
+.aviso-global .aviso-texto p {
+    font-size: 14px;
+    margin: 0;
+    color: #5a6c7d;
+}
+
+.aviso-global .aviso-texto strong {
+    color: #2c3e50;
+}
+
+.aviso-global .aviso-botao {
+    padding: 8px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s;
+    flex-shrink: 0;
+}
+
+.aviso-global .aviso-botao:hover {
+    background: #2980b9;
+}
+
+.aviso-global.aviso-erro .aviso-botao {
+    background: #e74c3c;
+}
+
+.aviso-global.aviso-erro .aviso-botao:hover {
+    background: #c0392b;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .aviso-global {
+        padding: 14px 16px;
+        margin: 10px 10px 15px 10px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .aviso-global .aviso-conteudo {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .aviso-global .aviso-botao {
+        width: 100%;
+        text-align: center;
+    }
+}

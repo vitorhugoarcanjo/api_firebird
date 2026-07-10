@@ -5,12 +5,12 @@ from .gerenciador_conexoes import gerenciador
 
 bp_conexoes = Blueprint('conexoes', __name__, url_prefix='/conexoes')
 
-@bp_conexoes.route('/cadastrar', methods=['GET'])
+@bp_conexoes.route('/tela_conexoes', methods=['GET'])
 def page_cadastrar():
     """Página de cadastro de conexão"""
-    return render_template('pasta_conexoes/cadastrar_conexao.html')
+    return render_template('pasta_conexoes/conexoes.html')
 
-@bp_conexoes.route('/cadastrar', methods=['POST'])
+@bp_conexoes.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrar():
     """Processa o cadastro de conexão"""
     try:

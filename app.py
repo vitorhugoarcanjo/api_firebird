@@ -4,7 +4,7 @@ from config.imports_blueprints import ini_imports_blueprints
 from config.imports_tabelas import ini_imports_tabelas
 from routes.pasta_conexoes_bd.conexoes import gerenciador
 
-from utils.conexao_global.conexao_firebird import verificar_conexao
+from utils.conexao_global.conexao_firebird import verificar_conexao, db
 
 app = Flask(__name__)
 
@@ -13,6 +13,20 @@ ini_imports_blueprints(app)
 
 # 2. Inicializa as tabelas do SQLite
 ini_imports_tabelas()
+
+
+# ==========================================
+# 🔥 CONTEXT PROCESSOR - DISPONÍVEL EM TODAS AS PÁGINAS
+# ==========================================
+@app.context_processor
+def inject_globals():
+    """Variáveis disponíveis em TODOS os templates"""
+    # Verifica se tem conexão ativa
+    tem_conexao = db.tem_conexao if hasattr(db, 'tem_conexao') else False
+    return {
+        'tem_conexao': tem_conexao,
+        'versao_sistema': 'v1.0'
+    }
 
 @app.route('/')
 def inicio():
