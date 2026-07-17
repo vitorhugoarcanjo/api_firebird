@@ -155,6 +155,7 @@ def verificar_conexao():
         primeira = todas[0]
         gerenciador.definir_ativa(primeira['id'])
         dados = gerenciador.buscar_ativa()
+
         return True, f"Conexão '{primeira['nome']}' ativada automaticamente", dados
     
     return False, "Nenhuma conexão cadastrada. Cadastre uma para começar.", None

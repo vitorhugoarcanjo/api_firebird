@@ -23,6 +23,7 @@ def inject_globals():
     """Variáveis disponíveis em TODOS os templates"""
     # Verifica se tem conexão ativa
     tem_conexao = db.tem_conexao if hasattr(db, 'tem_conexao') else False
+
     return {
         'tem_conexao': tem_conexao,
         'versao_sistema': 'v1.0'

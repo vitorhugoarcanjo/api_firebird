@@ -1,5 +1,5 @@
 # routes/pasta_conexoes/routes.py
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, jsonify, url_for, redirect
 import fdb
 from .gerenciador_conexoes import gerenciador
 
@@ -8,7 +8,9 @@ bp_conexoes = Blueprint('conexoes', __name__, url_prefix='/conexoes')
 @bp_conexoes.route('/tela_conexoes', methods=['GET'])
 def page_cadastrar():
     """Página de cadastro de conexão"""
-    return render_template('pasta_conexoes/conexoes.html')
+    conexoes_cadastradas = gerenciador.listar_todas()
+
+    return render_template('pasta_conexoes/conexoes.html', conexoes_cadastradas=conexoes_cadastradas)
 
 @bp_conexoes.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrar():
@@ -34,11 +36,7 @@ def cadastrar():
         if padrao:
             gerenciador.definir_ativa(id_conn)
 
-        return render_template(
-            'pasta_conexoes/cadastrar_conexao.html',
-            mensagem=f'✅ Conexão "{nome}" cadastrada com sucesso!',
-            tipo_mensagem='sucesso'
-        )
+        return redirect(url_for('conexoes.page_cadastrar'))
 
     except Exception as e:
         return render_template(
