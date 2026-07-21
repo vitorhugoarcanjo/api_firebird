@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block css_extra %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modules/pasta_conexoes/conexoes.css') }}">
+{% endblock %}
+
 {% block titulo %}Gerenciar Conexões{% endblock %}
 
 {% block titulo_pagina %}⚙️ Gerenciar Conexões{% endblock %}
@@ -48,110 +52,4 @@
         {% endif %}
     </div>
 </div>
-{% endblock %}
-
-{% block css_extra %}
-<style>
-    .container-conexoes {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .header-conexoes {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .header-conexoes h1 {
-        font-size: 24px;
-        color: #2c3e50;
-        margin: 0;
-    }
-
-    .btn-novo {
-        display: inline-block;
-        padding: 10px 24px;
-        background: #3498db;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background 0.3s;
-    }
-
-    .btn-novo:hover {
-        background: #2980b9;
-    }
-
-    .lista-conexoes {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border: 1px solid #f0f2f5;
-        min-height: 200px;
-    }
-
-    .lista-conexoes table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .lista-conexoes th {
-        text-align: left;
-        padding: 12px 16px;
-        background: #f8f9fa;
-        font-weight: 600;
-        color: #2c3e50;
-        border-bottom: 2px solid #e9ecef;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .lista-conexoes td {
-        padding: 12px 16px;
-        border-bottom: 1px solid #f0f2f5;
-    }
-
-    .lista-conexoes tr:hover td {
-        background: #fafbfc;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .badge-ativa {
-        background: #e8f5e9;
-        color: #27ae60;
-    }
-
-    .badge-inativa {
-        background: #f5f5f5;
-        color: #95a5a6;
-    }
-
-    .sem-conexoes {
-        text-align: center;
-        padding: 40px 20px;
-        color: #95a5a6;
-    }
-
-    .sem-conexoes p {
-        font-size: 16px;
-        margin-bottom: 16px;
-    }
-</style>
 {% endblock %}
